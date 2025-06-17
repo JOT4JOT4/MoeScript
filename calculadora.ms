@@ -42,15 +42,15 @@ moshi (opcion == 1) {
     resultado = sumar(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }
-nani moshi (opcion == 2) {
+moshimoshi (opcion == 2) {
     resultado = restar(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }
-nani moshi (opcion == 3) {
+moshimoshi (opcion == 3) {
     resultado = multiplicar(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }
-nani moshi (opcion == 4) {
+moshimoshi (opcion == 4) {
     resultado = dividir(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }

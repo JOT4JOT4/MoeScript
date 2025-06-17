@@ -1,20 +1,36 @@
+#include "interpreter.hpp"
 #include <fstream>
-#include "ast.h"
+#include <iostream>
 
-extern ASTNode* root; // Esto le dice a main.cpp que root está definida en otro archivo
-extern int yyparse(); // Declaración de la función yyparse generada por Bison
+extern ASTNode* root;
+extern int yyparse();
+extern FILE* yyin;
 
-int main() {
-    yyparse();
-    if (root) {
-        std::ofstream out("programa_generado.cpp");
-        out << "#include <iostream>\n";
-        out << "int main() {\n";
-        root->generarCodigo(out, 2);
-        out << "  return 0;\n}\n";
-        out.close();
-        std::cout << "Código C++ generado en programa_generado.cpp\n";
-        delete root;
+int main(int argc, char* argv[]) {
+    // Abrir el archivo calculadora.ms
+    FILE* input = fopen("calculadora.ms", "r");
+    if (!input) {
+        std::cerr << "No se pudo abrir el archivo calculadora.ms" << std::endl;
+        return 1;
     }
+    
+    // Asignar el archivo como entrada para el lexer
+    yyin = input;
+
+    // Parsear y ejecutar
+    if (yyparse() == 0 && root != nullptr) {
+        try {
+            Interpreter interpreter;
+            interpreter.execute(root);
+            delete root; // Liberar memoria del AST
+        } catch (const std::exception& e) {
+            std::cerr << "Error de ejecución: " << e.what() << std::endl;
+            delete root;
+            fclose(input);
+            return 1;
+        }
+    }
+
+    fclose(input);
     return 0;
 }

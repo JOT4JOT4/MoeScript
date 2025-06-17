@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+#ifndef YY_YY_PARSER_TAB_H_INCLUDED
+# define YY_YY_PARSER_TAB_H_INCLUDED
 /* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -49,7 +49,7 @@ extern int yydebug;
 
 
 /* Line 2058 of yacc.c  */
-#line 53 "y.tab.h"
+#line 53 "parser.tab.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -61,84 +61,44 @@ extern int yydebug;
      WHILE = 259,
      FOR = 260,
      ELSE = 261,
-     INTEGER = 262,
-     FLOAT = 263,
-     BOOLEAN = 264,
-     PRINT = 265,
-     READ = 266,
-     NEW = 267,
-     FUNC = 268,
-     RETURN = 269,
-     IDENTIFICADOR = 270,
-     CONST_INTEGER = 271,
-     CONST_FLOAT = 272,
-     CONST_CADENA = 273,
-     OP_SUMA = 274,
-     OP_RESTA = 275,
-     OP_MULT = 276,
-     OP_DIV = 277,
-     OP_IGUAL = 278,
-     OP_MAYOR = 279,
-     OP_MENOR = 280,
-     OP_MAYORIGUAL = 281,
-     OP_MENORIGUAL = 282,
-     OP_COMP_IGUAL = 283,
-     OP_NEGACION = 284,
-     OP_DISTINTO = 285,
-     LLAVE_A = 286,
-     LLAVE_C = 287,
-     PARENTESIS_A = 288,
-     PARENTESIS_C = 289,
-     FIN_SENTENCIA = 290,
-     CHAR_COMA = 291,
-     CHAR_PUNTO = 292,
-     CHAR_PUNTOYCOMA = 293,
-     CHAR_DOSPUNTOS = 294,
-     INI_COMENTARIO = 295,
-     FIN_COMENTARIO = 296
+     ELIF = 262,
+     INTEGER = 263,
+     FLOAT = 264,
+     BOOLEAN = 265,
+     PRINT = 266,
+     READ = 267,
+     NEW = 268,
+     FUNC = 269,
+     RETURN = 270,
+     IDENTIFICADOR = 271,
+     CONST_INTEGER = 272,
+     CONST_FLOAT = 273,
+     CONST_CADENA = 274,
+     OP_SUMA = 275,
+     OP_RESTA = 276,
+     OP_MULT = 277,
+     OP_DIV = 278,
+     OP_IGUAL = 279,
+     OP_MAYOR = 280,
+     OP_MENOR = 281,
+     OP_MAYORIGUAL = 282,
+     OP_MENORIGUAL = 283,
+     OP_COMP_IGUAL = 284,
+     OP_NEGACION = 285,
+     OP_DISTINTO = 286,
+     LLAVE_A = 287,
+     LLAVE_C = 288,
+     PARENTESIS_A = 289,
+     PARENTESIS_C = 290,
+     FIN_SENTENCIA = 291,
+     CHAR_COMA = 292,
+     CHAR_PUNTO = 293,
+     CHAR_PUNTOYCOMA = 294,
+     CHAR_DOSPUNTOS = 295,
+     INI_COMENTARIO = 296,
+     FIN_COMENTARIO = 297
    };
 #endif
-/* Tokens.  */
-#define IF 258
-#define WHILE 259
-#define FOR 260
-#define ELSE 261
-#define INTEGER 262
-#define FLOAT 263
-#define BOOLEAN 264
-#define PRINT 265
-#define READ 266
-#define NEW 267
-#define FUNC 268
-#define RETURN 269
-#define IDENTIFICADOR 270
-#define CONST_INTEGER 271
-#define CONST_FLOAT 272
-#define CONST_CADENA 273
-#define OP_SUMA 274
-#define OP_RESTA 275
-#define OP_MULT 276
-#define OP_DIV 277
-#define OP_IGUAL 278
-#define OP_MAYOR 279
-#define OP_MENOR 280
-#define OP_MAYORIGUAL 281
-#define OP_MENORIGUAL 282
-#define OP_COMP_IGUAL 283
-#define OP_NEGACION 284
-#define OP_DISTINTO 285
-#define LLAVE_A 286
-#define LLAVE_C 287
-#define PARENTESIS_A 288
-#define PARENTESIS_C 289
-#define FIN_SENTENCIA 290
-#define CHAR_COMA 291
-#define CHAR_PUNTO 292
-#define CHAR_PUNTOYCOMA 293
-#define CHAR_DOSPUNTOS 294
-#define INI_COMENTARIO 295
-#define FIN_COMENTARIO 296
-
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -156,7 +116,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 160 "y.tab.h"
+#line 120 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -179,4 +139,4 @@ int yyparse ();
 #endif
 #endif /* ! YYPARSE_PARAM */
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */

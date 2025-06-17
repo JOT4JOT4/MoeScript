@@ -1,13 +1,14 @@
 %code requires {
     #include <vector>
     #include <memory>
-    #include "ast.h"
+    #include "ast.hpp"
 }
 
 %{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ast.hpp"
 void yyerror(const char *s);
 int yylex(void);
 ASTNode* root = nullptr; // Nodo raíz global
@@ -22,7 +23,7 @@ ASTNode* root = nullptr; // Nodo raíz global
     std::vector<std::string>* strvec;
 }
 
-%token IF WHILE FOR ELSE INTEGER FLOAT BOOLEAN PRINT READ NEW
+%token IF WHILE FOR ELSE ELIF INTEGER FLOAT BOOLEAN PRINT READ NEW
 %token FUNC RETURN
 %token IDENTIFICADOR CONST_INTEGER CONST_FLOAT CONST_CADENA
 %token OP_SUMA OP_RESTA OP_MULT OP_DIV OP_IGUAL OP_MAYOR OP_MENOR
@@ -31,9 +32,15 @@ ASTNode* root = nullptr; // Nodo raíz global
 %token CHAR_COMA CHAR_PUNTO CHAR_PUNTOYCOMA CHAR_DOSPUNTOS
 %token INI_COMENTARIO FIN_COMENTARIO
 
+%left OP_SUMA OP_RESTA
+%left OP_MULT OP_DIV
+%nonassoc OP_IGUAL
+%nonassoc OP_COMP_IGUAL OP_DISTINTO
+%nonassoc OP_MAYOR OP_MENOR OP_MAYORIGUAL OP_MENORIGUAL
+
 %type <node> programa sentencia sentencia_lista declaracion asignacion expresion estructura_control impresion lectura argumento comentario funcion llamada_funcion bloque_sentencias
 %type <vec> argumentos
-%type <strvec> parametros
+%type <strvec> parametros lista_parametros
 
 %type <sval> tipo IDENTIFICADOR CONST_CADENA
 %type <ival> CONST_INTEGER
@@ -69,7 +76,9 @@ sentencia:
     | estructura_control { $$ = $1; }
     | comentario { $$ = $1; }
     | funcion { $$ = $1; }
-    | RETURN expresion FIN_SENTENCIA { $$ = new ReturnNode(std::unique_ptr<ASTNode>($2)); }
+    | RETURN expresion FIN_SENTENCIA { 
+        $$ = new ReturnNode(std::unique_ptr<ASTNode>($2)); 
+    }
 ;
 
 funcion:
@@ -81,9 +90,24 @@ funcion:
 ;
 
 parametros:
-    /* vacío */ { $$ = new std::vector<std::string>(); }
-    | IDENTIFICADOR { auto v = new std::vector<std::string>(); v->push_back($1); free($1); $$ = v; }
-    | IDENTIFICADOR CHAR_COMA parametros { auto v = $3; v->insert(v->begin(), $1); free($1); $$ = v; }
+    /* vacío */ { 
+        $$ = new std::vector<std::string>(); 
+    }
+    | lista_parametros { $$ = $1; }
+;
+
+lista_parametros:
+    IDENTIFICADOR { 
+        auto v = new std::vector<std::string>(); 
+        v->push_back($1); 
+        free($1); 
+        $$ = v; 
+    }
+    | lista_parametros CHAR_COMA IDENTIFICADOR { 
+        $1->push_back($3); 
+        free($3); 
+        $$ = $1;
+    }
 ;
 
 llamada_funcion:
@@ -124,6 +148,10 @@ expresion:
         node->operandos.push_back(std::unique_ptr<ASTNode>($1));
         node->operandos.push_back(std::unique_ptr<ASTNode>($3));
         $$ = node;
+    }
+    | IDENTIFICADOR { 
+        $$ = new IdentificadorNode($1); 
+        free($1); 
     }
     | expresion OP_RESTA expresion {
         auto node = new ExpresionNode("-");
@@ -200,6 +228,44 @@ estructura_control:
         for (auto& s : cuerpo->sentencias)
             node->cuerpo.push_back(std::move(s));
         delete cuerpo;
+        $$ = node;
+    }
+    | IF PARENTESIS_A expresion PARENTESIS_C bloque_sentencias ELIF PARENTESIS_A expresion PARENTESIS_C bloque_sentencias {
+        // Crear nodo if principal
+        auto node = new ControlNode("if");
+        node->condicion = std::unique_ptr<ASTNode>($3);
+        auto cuerpoIf = static_cast<ProgramaNode*>($5);
+        for (auto& s : cuerpoIf->sentencias)
+            node->cuerpo.push_back(std::move(s));
+        delete cuerpoIf;
+
+        // Crear nodo elif
+        auto elifNode = new ControlNode("if");
+        elifNode->condicion = std::unique_ptr<ASTNode>($8);
+        auto cuerpoElif = static_cast<ProgramaNode*>($10);
+        for (auto& s : cuerpoElif->sentencias)
+            elifNode->cuerpo.push_back(std::move(s));
+        delete cuerpoElif;
+
+        // Conectar elif como elseCuerpo del if principal
+        node->elseCuerpo = std::unique_ptr<ASTNode>(elifNode);
+        $$ = node;
+    }
+    | IF PARENTESIS_A expresion PARENTESIS_C bloque_sentencias ELSE bloque_sentencias {
+        auto node = new ControlNode("if");
+        node->condicion = std::unique_ptr<ASTNode>($3);
+        auto cuerpoIf = static_cast<ProgramaNode*>($5);
+        for (auto& s : cuerpoIf->sentencias)
+            node->cuerpo.push_back(std::move(s));
+        delete cuerpoIf;
+
+        auto elseNode = new ControlNode("else");
+        auto cuerpoElse = static_cast<ProgramaNode*>($7);
+        for (auto& s : cuerpoElse->sentencias)
+            elseNode->cuerpo.push_back(std::move(s));
+        delete cuerpoElse;
+        
+        node->elseCuerpo = std::unique_ptr<ASTNode>(elseNode);
         $$ = node;
     }
     | WHILE PARENTESIS_A expresion PARENTESIS_C bloque_sentencias {
