@@ -1,7 +1,10 @@
 %{
     #include "parser.tab.h"
     #include <stdio.h>
+    int yylineno = 1;  // Agregar esta línea
 %}
+
+%option yylineno  // Agregar esta opción
 
 /* SECCION DE TOKENS */
 
@@ -103,13 +106,16 @@ RETURN              (uwu|UWU)
 {PARENTESIS_C}      { printf("\nPARENTESIS_C (%s)", yytext); return PARENTESIS_C; }
 {FIN_SENTENCIA}     { printf("\nFIN_SENTENCIA (%s)", yytext); return FIN_SENTENCIA; }
 
-"\n"
+"\n"                { yylineno++; }  // Actualizar el contador de líneas
 "\t"
 " "
 
 [ \t\r\n]+          { /* Ignorar espacios en blanco */ }
 
-.                   { return yytext[0]; }
+. {
+    fprintf(stderr, "\nLEX ERROR: carácter desconocido (%s)\n", yytext);
+    exit(1);
+}
 
 %%
 

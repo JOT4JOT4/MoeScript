@@ -24,6 +24,9 @@ RuntimeValue Interpreter::evaluate(ASTNode* node) {
             return evaluateLectura(static_cast<LecturaNode*>(node));
         case ASTNodeType::LlamadaFuncion:
             return evaluateLlamadaFuncion(static_cast<LlamadaFuncionNode*>(node));
+        case ASTNodeType::Funcion:
+            std::cout << "Evaluando nodo tipo: " << static_cast<int>(node->type) << std::endl;
+            return evaluateFuncion(static_cast<FuncionNode*>(node));
         case ASTNodeType::Return:
             return evaluateReturn(static_cast<ReturnNode*>(node));
         default:
@@ -90,13 +93,42 @@ RuntimeValue Interpreter::evaluateExpresion(ExpresionNode* node) {
     }
 
     // Agregar implementación de operadores faltantes
-    if (node->operador == "-") {
+    else if (node->operador == "-") {
         if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
             return RuntimeValue(left.intValue - right.intValue);
         if (left.type == RuntimeValue::Type::FLOAT || right.type == RuntimeValue::Type::FLOAT)
             return RuntimeValue(static_cast<float>(left.floatValue) - static_cast<float>(right.floatValue));
     }
-    // Implementar otros operadores...
+    
+    else if (node->operador == "*") {
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue * right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT || right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(static_cast<float>(left.floatValue) * static_cast<float>(right.floatValue));
+    }
+    else if (node->operador == "/") {
+        if (right.type == RuntimeValue::Type::INTEGER && right.intValue == 0)
+            throw std::runtime_error("División por cero");
+        if (right.type == RuntimeValue::Type::FLOAT && right.floatValue == 0.0f)
+            throw std::runtime_error("División por cero");
+            
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue / right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT || right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(static_cast<float>(left.floatValue) / static_cast<float>(right.floatValue));
+    }
+    else if (node->operador == "==") {
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue == right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT && right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(left.floatValue == right.floatValue);
+        if (left.type == RuntimeValue::Type::STRING && right.type == RuntimeValue::Type::STRING)
+            return RuntimeValue(left.stringValue == right.stringValue);
+        // Si los tipos son diferentes, convertir a float para comparar
+        float leftVal = (left.type == RuntimeValue::Type::INTEGER) ? left.intValue : left.floatValue;
+        float rightVal = (right.type == RuntimeValue::Type::INTEGER) ? right.intValue : right.floatValue;
+        return RuntimeValue(leftVal == rightVal);
+    }
 
     throw std::runtime_error("Operador no soportado: " + node->operador);
 }

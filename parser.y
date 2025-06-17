@@ -83,6 +83,7 @@ sentencia:
 
 funcion:
     FUNC IDENTIFICADOR PARENTESIS_A parametros PARENTESIS_C bloque_sentencias {
+        printf(">>> Entró a FUNCION con nombre: %s\n", $2);
         $$ = new FuncionNode($2, *$4, std::unique_ptr<ASTNode>($6));
         free($2);
         delete $4;
@@ -148,10 +149,6 @@ expresion:
         node->operandos.push_back(std::unique_ptr<ASTNode>($1));
         node->operandos.push_back(std::unique_ptr<ASTNode>($3));
         $$ = node;
-    }
-    | IDENTIFICADOR { 
-        $$ = new IdentificadorNode($1); 
-        free($1); 
     }
     | expresion OP_RESTA expresion {
         auto node = new ExpresionNode("-");
@@ -369,7 +366,37 @@ elemento_texto:
 
 %%
 
+extern int yylineno;
+extern char* yytext;
+
 void yyerror(const char *s) {
-    fprintf(stderr, "Error de sintaxis: %s\n", s);
+    fprintf(stderr, "\nError de sintaxis en línea %d: %s\n", yylineno, s);
+    fprintf(stderr, "Token actual: '%s'\n", yytext);
+    fprintf(stderr, "Posibles causas:\n");
+    fprintf(stderr, "- Token inesperado en esta posición\n");
+    fprintf(stderr, "- Falta un token requerido antes de '%s'\n", yytext);
+    fprintf(stderr, "- Error en la estructura de la sentencia\n");
+    
+    // Sugerencias específicas basadas en el token actual
+    if (strcmp(yytext, "(") == 0) {
+        fprintf(stderr, "Sugerencias:\n");
+        fprintf(stderr, "- Verificar que la función esté correctamente declarada\n");
+        fprintf(stderr, "- Asegurarse de que los parámetros estén separados por comas\n");
+    }
+    else if (strcmp(yytext, ")") == 0) {
+        fprintf(stderr, "Sugerencias:\n");
+        fprintf(stderr, "- Verificar que todos los paréntesis estén balanceados\n");
+        fprintf(stderr, "- Revisar la lista de parámetros/argumentos\n");
+    }
+    else if (strcmp(yytext, "{") == 0 || strcmp(yytext, "}") == 0) {
+        fprintf(stderr, "Sugerencias:\n");
+        fprintf(stderr, "- Verificar que todas las llaves estén balanceadas\n");
+        fprintf(stderr, "- Asegurarse de que el bloque de código esté completo\n");
+    }
+    else if (strcmp(yytext, "-chan") == 0) {
+        fprintf(stderr, "Sugerencias:\n");
+        fprintf(stderr, "- Verificar que la sentencia esté completa\n");
+        fprintf(stderr, "- Asegurarse de que no falten operadores o expresiones\n");
+    }
 }
 

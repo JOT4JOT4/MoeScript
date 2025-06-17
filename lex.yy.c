@@ -1140,14 +1140,17 @@ YY_RULE_SETUP
 case 42:
 YY_RULE_SETUP
 #line 112 "lexer.l"
-{ return yytext[0]; }
+{
+    fprintf(stderr, "\nLEX ERROR: carácter desconocido (%s)\n", yytext);
+    exit(1);
+}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 114 "lexer.l"
+#line 117 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 1150 "lex.yy.c"
+#line 1153 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2148,7 +2151,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 114 "lexer.l"
+#line 117 "lexer.l"
 
 
 int yywrap() { return 1; }

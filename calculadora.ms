@@ -33,24 +33,25 @@ baka("4. Dividir") -chan
 baka("Elige una opcion: ") -chan
 yomu(opcion) -chan
 
-baka("Ingresa el primer número: ") -chan
+baka("Ingresa el primer numero: ") -chan
 yomu(x) -chan
-baka("Ingresa el segundo número: ") -chan
+baka("Ingresa el segundo numero: ") -chan
 yomu(y) -chan
 
 moshi (opcion == 1) {
+    baka("entro aqui") -chan
     resultado = sumar(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }
-moshimoshi (opcion == 2) {
+moshi (opcion == 2) {
     resultado = restar(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }
-moshimoshi (opcion == 3) {
+moshi (opcion == 3) {
     resultado = multiplicar(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }
-moshimoshi (opcion == 4) {
+moshi (opcion == 4) {
     resultado = dividir(x, y) -chan
     baka("Resultado: ", resultado) -chan
 }
