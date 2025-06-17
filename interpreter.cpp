@@ -25,7 +25,6 @@ RuntimeValue Interpreter::evaluate(ASTNode* node) {
         case ASTNodeType::LlamadaFuncion:
             return evaluateLlamadaFuncion(static_cast<LlamadaFuncionNode*>(node));
         case ASTNodeType::Funcion:
-            std::cout << "Evaluando nodo tipo: " << static_cast<int>(node->type) << std::endl;
             return evaluateFuncion(static_cast<FuncionNode*>(node));
         case ASTNodeType::Return:
             return evaluateReturn(static_cast<ReturnNode*>(node));
@@ -129,6 +128,60 @@ RuntimeValue Interpreter::evaluateExpresion(ExpresionNode* node) {
         float rightVal = (right.type == RuntimeValue::Type::INTEGER) ? right.intValue : right.floatValue;
         return RuntimeValue(leftVal == rightVal);
     }
+    else if (node->operador == "!=") {
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue != right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT && right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(left.floatValue != right.floatValue);
+        if (left.type == RuntimeValue::Type::STRING && right.type == RuntimeValue::Type::STRING)
+            return RuntimeValue(left.stringValue != right.stringValue);
+        float leftVal = (left.type == RuntimeValue::Type::INTEGER) ? left.intValue : left.floatValue;
+        float rightVal = (right.type == RuntimeValue::Type::INTEGER) ? right.intValue : right.floatValue;
+        return RuntimeValue(leftVal != rightVal);
+    }
+    else if (node->operador == ">") {
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue > right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT && right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(left.floatValue > right.floatValue);
+        float leftVal = (left.type == RuntimeValue::Type::INTEGER) ? left.intValue : left.floatValue;
+        float rightVal = (right.type == RuntimeValue::Type::INTEGER) ? right.intValue : right.floatValue;
+        return RuntimeValue(leftVal > rightVal);
+    }
+    else if (node->operador == "<") {
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue < right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT && right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(left.floatValue < right.floatValue);
+        float leftVal = (left.type == RuntimeValue::Type::INTEGER) ? left.intValue : left.floatValue;
+        float rightVal = (right.type == RuntimeValue::Type::INTEGER) ? right.intValue : right.floatValue;
+        return RuntimeValue(leftVal < rightVal);
+    }
+    else if (node->operador == ">=") {
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue >= right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT && right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(left.floatValue >= right.floatValue);
+        float leftVal = (left.type == RuntimeValue::Type::INTEGER) ? left.intValue : left.floatValue;
+        float rightVal = (right.type == RuntimeValue::Type::INTEGER) ? right.intValue : right.floatValue;
+        return RuntimeValue(leftVal >= rightVal);
+    }
+    else if (node->operador == "<=") {
+        if (left.type == RuntimeValue::Type::INTEGER && right.type == RuntimeValue::Type::INTEGER)
+            return RuntimeValue(left.intValue <= right.intValue);
+        if (left.type == RuntimeValue::Type::FLOAT && right.type == RuntimeValue::Type::FLOAT)
+            return RuntimeValue(left.floatValue <= right.floatValue);
+        float leftVal = (left.type == RuntimeValue::Type::INTEGER) ? left.intValue : left.floatValue;
+        float rightVal = (right.type == RuntimeValue::Type::INTEGER) ? right.intValue : right.floatValue;
+        return RuntimeValue(leftVal <= rightVal);
+    }
+    else if (node->operador == "!") {
+        // Operador de negación lógica
+        if (left.type == RuntimeValue::Type::BOOLEAN)
+            return RuntimeValue(!left.boolValue);
+        // Si no es booleano, convertir a booleano
+        return RuntimeValue(!(left.type != RuntimeValue::Type::NULL_VALUE));
+    }
 
     throw std::runtime_error("Operador no soportado: " + node->operador);
 }
@@ -160,18 +213,56 @@ RuntimeValue Interpreter::evaluateControl(ControlNode* node) {
     if (node->tipo == "if") {
         RuntimeValue condicion = evaluate(node->condicion.get());
         if (condicion.boolValue) {
+            // Ejecutar el cuerpo del if
             for (const auto& sentencia : node->cuerpo) {
                 evaluate(sentencia.get());
+                if (isReturning) return returnValue;
             }
+        } 
+        else if (node->elseCuerpo) {
+            // Si hay un else o elif, ejecutarlo
+            return evaluate(node->elseCuerpo.get());
+        }
+    }
+    else if (node->tipo == "else") {
+        // Ejecutar directamente el cuerpo del else
+        for (const auto& sentencia : node->cuerpo) {
+            evaluate(sentencia.get());
+            if (isReturning) return returnValue;
         }
     }
     else if (node->tipo == "while") {
         while (evaluate(node->condicion.get()).boolValue) {
             for (const auto& sentencia : node->cuerpo) {
                 evaluate(sentencia.get());
+                if (isReturning) return returnValue;
             }
         }
     }
+    else if (node->tipo == "for") {
+        // El for necesita: inicialización, condición, incremento
+        auto forNode = static_cast<ControlNode*>(node);
+        
+        // Ejecutar inicialización si existe
+        if (!forNode->cuerpo.empty()) {
+            evaluate(forNode->cuerpo[0].get());
+        }
+
+        // Evaluar condición y ejecutar cuerpo
+        while (evaluate(forNode->condicion.get()).boolValue) {
+            // Ejecutar el cuerpo del for
+            for (size_t i = 2; i < forNode->cuerpo.size(); i++) {
+                evaluate(forNode->cuerpo[i].get());
+                if (isReturning) return returnValue;
+            }
+
+            // Ejecutar el incremento
+            if (forNode->cuerpo.size() > 1) {
+                evaluate(forNode->cuerpo[1].get());
+            }
+        }
+    }
+
     return RuntimeValue(); // Retorna null para estructuras de control
 }
 
@@ -187,11 +278,34 @@ RuntimeValue Interpreter::evaluateImpresion(ImpresionNode* node) {
 RuntimeValue Interpreter::evaluateLectura(LecturaNode* node) {
     std::string input;
     std::getline(std::cin, input);
-    RuntimeValue valor(input);
-    auto* var = globalEnv->lookup(node->nombre);  // Usamos nombre en vez de variable
+    
+    // Obtener la variable para ver su tipo
+    auto* var = globalEnv->lookup(node->nombre);
     if (!var) {
         throw std::runtime_error("Variable no declarada: " + node->nombre);
     }
+
+    // Convertir según el tipo de la variable
+    RuntimeValue valor;
+    try {
+        switch (var->type) {
+            case RuntimeValue::Type::INTEGER:
+                valor = RuntimeValue(std::stoi(input));
+                break;
+            case RuntimeValue::Type::FLOAT:
+                valor = RuntimeValue(std::stof(input));
+                break;
+            case RuntimeValue::Type::BOOLEAN:
+                valor = RuntimeValue(input == "true" || input == "1");
+                break;
+            default:
+                valor = RuntimeValue(input); // String por defecto
+        }
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Error al convertir entrada: '" + input + 
+            "' al tipo requerido. " + e.what());
+    }
+
     *var = valor;
     return valor;
 }

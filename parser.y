@@ -83,7 +83,6 @@ sentencia:
 
 funcion:
     FUNC IDENTIFICADOR PARENTESIS_A parametros PARENTESIS_C bloque_sentencias {
-        printf(">>> Entró a FUNCION con nombre: %s\n", $2);
         $$ = new FuncionNode($2, *$4, std::unique_ptr<ASTNode>($6));
         free($2);
         delete $4;

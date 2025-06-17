@@ -530,13 +530,13 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    53,    53,    57,    68,    72,    73,    74,    75,    76,
-      77,    78,    79,    85,    94,    97,   101,   107,   115,   123,
-     127,   134,   135,   136,   140,   147,   153,   159,   165,   171,
-     177,   183,   189,   195,   201,   207,   212,   213,   214,   215,
-     216,   217,   221,   230,   251,   268,   277,   286,   297,   301,
-     310,   315,   323,   324,   328,   335,   339,   340,   344,   345,
-     346,   347,   348,   349,   350,   351,   352,   353,   354,   355,
-     356,   357,   358,   359,   360,   361,   362,   363,   364
+      77,    78,    79,    85,    93,    96,   100,   106,   114,   122,
+     126,   133,   134,   135,   139,   146,   152,   158,   164,   170,
+     176,   182,   188,   194,   200,   206,   211,   212,   213,   214,
+     215,   216,   220,   229,   250,   267,   276,   285,   296,   300,
+     309,   314,   322,   323,   327,   334,   338,   339,   343,   344,
+     345,   346,   347,   348,   349,   350,   351,   352,   353,   354,
+     355,   356,   357,   358,   359,   360,   361,   362,   363
 };
 #endif
 
@@ -1632,7 +1632,6 @@ yyreduce:
 /* Line 1792 of yacc.c  */
 #line 85 "parser.y"
     {
-        printf(">>> Entró a FUNCION con nombre: %s\n", (yyvsp[(2) - (6)].sval));
         (yyval.node) = new FuncionNode((yyvsp[(2) - (6)].sval), *(yyvsp[(4) - (6)].strvec), std::unique_ptr<ASTNode>((yyvsp[(6) - (6)].node)));
         free((yyvsp[(2) - (6)].sval));
         delete (yyvsp[(4) - (6)].strvec);
@@ -1641,7 +1640,7 @@ yyreduce:
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 94 "parser.y"
+#line 93 "parser.y"
     { 
         (yyval.strvec) = new std::vector<std::string>(); 
     }
@@ -1649,13 +1648,13 @@ yyreduce:
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 97 "parser.y"
+#line 96 "parser.y"
     { (yyval.strvec) = (yyvsp[(1) - (1)].strvec); }
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 101 "parser.y"
+#line 100 "parser.y"
     { 
         auto v = new std::vector<std::string>(); 
         v->push_back((yyvsp[(1) - (1)].sval)); 
@@ -1666,7 +1665,7 @@ yyreduce:
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 107 "parser.y"
+#line 106 "parser.y"
     { 
         (yyvsp[(1) - (3)].strvec)->push_back((yyvsp[(3) - (3)].sval)); 
         free((yyvsp[(3) - (3)].sval)); 
@@ -1676,7 +1675,7 @@ yyreduce:
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 115 "parser.y"
+#line 114 "parser.y"
     {
         (yyval.node) = new LlamadaFuncionNode((yyvsp[(1) - (4)].sval), std::move(*(yyvsp[(3) - (4)].vec)));
         free((yyvsp[(1) - (4)].sval));
@@ -1686,7 +1685,7 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 123 "parser.y"
+#line 122 "parser.y"
     {
         (yyval.node) = new DeclaracionNode(std::string((yyvsp[(1) - (2)].sval)), std::string((yyvsp[(2) - (2)].sval)), nullptr);
         free((yyvsp[(1) - (2)].sval)); free((yyvsp[(2) - (2)].sval));
@@ -1695,7 +1694,7 @@ yyreduce:
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 127 "parser.y"
+#line 126 "parser.y"
     {
         (yyval.node) = new DeclaracionNode(std::string((yyvsp[(1) - (4)].sval)), std::string((yyvsp[(2) - (4)].sval)), std::unique_ptr<ASTNode>((yyvsp[(4) - (4)].node)));
         free((yyvsp[(1) - (4)].sval)); free((yyvsp[(2) - (4)].sval));
@@ -1704,25 +1703,25 @@ yyreduce:
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 134 "parser.y"
+#line 133 "parser.y"
     { (yyval.sval) = strdup("senpai"); }
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 135 "parser.y"
+#line 134 "parser.y"
     { (yyval.sval) = strdup("kohai"); }
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 136 "parser.y"
+#line 135 "parser.y"
     { (yyval.sval) = strdup("bool"); }
     break;
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 140 "parser.y"
+#line 139 "parser.y"
     {
         (yyval.node) = new AsignacionNode((yyvsp[(1) - (3)].sval), std::unique_ptr<ASTNode>((yyvsp[(3) - (3)].node)));
         free((yyvsp[(1) - (3)].sval));
@@ -1731,7 +1730,7 @@ yyreduce:
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 147 "parser.y"
+#line 146 "parser.y"
     {
         auto node = new ExpresionNode("+");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1742,7 +1741,7 @@ yyreduce:
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 153 "parser.y"
+#line 152 "parser.y"
     {
         auto node = new ExpresionNode("-");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1753,7 +1752,7 @@ yyreduce:
 
   case 27:
 /* Line 1792 of yacc.c  */
-#line 159 "parser.y"
+#line 158 "parser.y"
     {
         auto node = new ExpresionNode("*");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1764,7 +1763,7 @@ yyreduce:
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 165 "parser.y"
+#line 164 "parser.y"
     {
         auto node = new ExpresionNode("/");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1775,7 +1774,7 @@ yyreduce:
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 171 "parser.y"
+#line 170 "parser.y"
     {
         auto node = new ExpresionNode("==");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1786,7 +1785,7 @@ yyreduce:
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 177 "parser.y"
+#line 176 "parser.y"
     {
         auto node = new ExpresionNode("!=");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1797,7 +1796,7 @@ yyreduce:
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 183 "parser.y"
+#line 182 "parser.y"
     {
         auto node = new ExpresionNode(">");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1808,7 +1807,7 @@ yyreduce:
 
   case 32:
 /* Line 1792 of yacc.c  */
-#line 189 "parser.y"
+#line 188 "parser.y"
     {
         auto node = new ExpresionNode("<");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1819,7 +1818,7 @@ yyreduce:
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 195 "parser.y"
+#line 194 "parser.y"
     {
         auto node = new ExpresionNode(">=");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1830,7 +1829,7 @@ yyreduce:
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 201 "parser.y"
+#line 200 "parser.y"
     {
         auto node = new ExpresionNode("<=");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -1841,7 +1840,7 @@ yyreduce:
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 207 "parser.y"
+#line 206 "parser.y"
     {
         auto node = new ExpresionNode("!");
         node->operandos.push_back(std::unique_ptr<ASTNode>((yyvsp[(2) - (2)].node)));
@@ -1851,43 +1850,43 @@ yyreduce:
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 212 "parser.y"
+#line 211 "parser.y"
     { (yyval.node) = (yyvsp[(2) - (3)].node); }
     break;
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 213 "parser.y"
+#line 212 "parser.y"
     { (yyval.node) = new LiteralNode(std::to_string((yyvsp[(1) - (1)].ival))); }
     break;
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 214 "parser.y"
+#line 213 "parser.y"
     { (yyval.node) = new LiteralNode(std::to_string((yyvsp[(1) - (1)].fval))); }
     break;
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 215 "parser.y"
+#line 214 "parser.y"
     { (yyval.node) = new LiteralNode((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); }
     break;
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 216 "parser.y"
+#line 215 "parser.y"
     { (yyval.node) = new IdentificadorNode((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); }
     break;
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 217 "parser.y"
+#line 216 "parser.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 42:
 /* Line 1792 of yacc.c  */
-#line 221 "parser.y"
+#line 220 "parser.y"
     {
         auto node = new ControlNode("if");
         node->condicion = std::unique_ptr<ASTNode>((yyvsp[(3) - (5)].node));
@@ -1901,7 +1900,7 @@ yyreduce:
 
   case 43:
 /* Line 1792 of yacc.c  */
-#line 230 "parser.y"
+#line 229 "parser.y"
     {
         // Crear nodo if principal
         auto node = new ControlNode("if");
@@ -1927,7 +1926,7 @@ yyreduce:
 
   case 44:
 /* Line 1792 of yacc.c  */
-#line 251 "parser.y"
+#line 250 "parser.y"
     {
         auto node = new ControlNode("if");
         node->condicion = std::unique_ptr<ASTNode>((yyvsp[(3) - (7)].node));
@@ -1949,7 +1948,7 @@ yyreduce:
 
   case 45:
 /* Line 1792 of yacc.c  */
-#line 268 "parser.y"
+#line 267 "parser.y"
     {
         auto node = new ControlNode("while");
         node->condicion = std::unique_ptr<ASTNode>((yyvsp[(3) - (5)].node));
@@ -1963,7 +1962,7 @@ yyreduce:
 
   case 46:
 /* Line 1792 of yacc.c  */
-#line 277 "parser.y"
+#line 276 "parser.y"
     {
         auto node = new ControlNode("for");
         node->condicion = std::unique_ptr<ASTNode>((yyvsp[(5) - (9)].node));
@@ -1977,7 +1976,7 @@ yyreduce:
 
   case 47:
 /* Line 1792 of yacc.c  */
-#line 286 "parser.y"
+#line 285 "parser.y"
     {
         auto node = new ControlNode("else");
         auto cuerpo = static_cast<ProgramaNode*>((yyvsp[(2) - (2)].node));
@@ -1990,13 +1989,13 @@ yyreduce:
 
   case 48:
 /* Line 1792 of yacc.c  */
-#line 297 "parser.y"
+#line 296 "parser.y"
     { (yyval.node) = (yyvsp[(2) - (3)].node); }
     break;
 
   case 49:
 /* Line 1792 of yacc.c  */
-#line 301 "parser.y"
+#line 300 "parser.y"
     {
         auto node = new ImpresionNode();
         node->argumentos = std::move(*(yyvsp[(3) - (4)].vec));
@@ -2007,7 +2006,7 @@ yyreduce:
 
   case 50:
 /* Line 1792 of yacc.c  */
-#line 310 "parser.y"
+#line 309 "parser.y"
     {
         auto vec = new std::vector<std::unique_ptr<ASTNode>>();
         vec->push_back(std::unique_ptr<ASTNode>((yyvsp[(1) - (1)].node)));
@@ -2017,7 +2016,7 @@ yyreduce:
 
   case 51:
 /* Line 1792 of yacc.c  */
-#line 315 "parser.y"
+#line 314 "parser.y"
     {
         auto vec = (yyvsp[(3) - (3)].vec);
         vec->insert(vec->begin(), std::unique_ptr<ASTNode>((yyvsp[(1) - (3)].node)));
@@ -2027,19 +2026,19 @@ yyreduce:
 
   case 52:
 /* Line 1792 of yacc.c  */
-#line 323 "parser.y"
+#line 322 "parser.y"
     { (yyval.node) = new LiteralNode((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); }
     break;
 
   case 53:
 /* Line 1792 of yacc.c  */
-#line 324 "parser.y"
+#line 323 "parser.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); }
     break;
 
   case 54:
 /* Line 1792 of yacc.c  */
-#line 328 "parser.y"
+#line 327 "parser.y"
     {
         (yyval.node) = new LecturaNode((yyvsp[(3) - (4)].sval));
         free((yyvsp[(3) - (4)].sval));
@@ -2048,13 +2047,13 @@ yyreduce:
 
   case 55:
 /* Line 1792 of yacc.c  */
-#line 335 "parser.y"
+#line 334 "parser.y"
     { (yyval.node) = nullptr; }
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 2058 "parser.tab.c"
+#line 2057 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2286,7 +2285,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 367 "parser.y"
+#line 366 "parser.y"
 
 
 extern int yylineno;

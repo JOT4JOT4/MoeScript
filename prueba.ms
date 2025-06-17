@@ -2,6 +2,19 @@ sugoi sumar(a, b) {
     uwu a + b -chan
 }
 
+sugoi senpai resultadoExponente{
+
+    yomu var1-chan
+    yomu var2-chan
+    senpai resultado= 1-chan
+
+    kawaii (var2 > 0){
+        resultado = resultado * var1-chan
+        var2 = var2 - 1-chan
+        }
+    uwu resultado
+}
+
 sugoi restar(a, b) {
     uwu a - b -chan
 }

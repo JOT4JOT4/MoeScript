@@ -20,6 +20,25 @@ sugoi dividir(a, b) {
     }
 }
 
+sugoi minimo(a, b) {
+    moshi (a < b) {
+        uwu a -chan
+    }
+    nani {
+        uwu b -chan
+    }
+}
+
+sugoi resultadoExponente(x, y) {
+    
+    senpai resultado= 1 -chan
+    kawaii (y > 0){
+        resultado = resultado * x -chan
+        y = y - 1 -chan
+    }
+    uwu resultado -chan
+}
+
 senpai opcion -chan
 kohai x = 0 -chan
 kohai y = 0 -chan
@@ -30,6 +49,7 @@ baka("1. Sumar") -chan
 baka("2. Restar") -chan
 baka("3. Multiplicar") -chan
 baka("4. Dividir") -chan
+baka("5. Exponente") -chan
 baka("Elige una opcion: ") -chan
 yomu(opcion) -chan
 
@@ -38,23 +58,34 @@ yomu(x) -chan
 baka("Ingresa el segundo numero: ") -chan
 yomu(y) -chan
 
-moshi (opcion == 1) {
-    baka("entro aqui") -chan
-    resultado = sumar(x, y) -chan
-    baka("Resultado: ", resultado) -chan
+moshi ( 0 < opcion) {
+    moshi ( opcion < 6) {
+        moshi (opcion == 1) {
+            resultado = sumar(x, y) -chan
+            baka("Resultado: ", resultado) -chan
+        }
+        moshi (opcion == 2) {
+            resultado = restar(x, y) -chan
+            baka("Resultado: ", resultado) -chan
+        }
+        moshi (opcion == 3) {
+            resultado = multiplicar(x, y) -chan
+            baka("Resultado: ", resultado) -chan
+        }
+        moshi (opcion == 4) {
+            resultado = dividir(x, y) -chan
+            baka("Resultado: ", resultado) -chan
+        }
+        moshi (opcion == 5) {
+            resultado = resultadoExponente(x, y) -chan
+            baka("Resultado: ", resultado) -chan
+        }
+    }
+    nani {
+        baka ("Opcion no valida") -chan
+    }
 }
-moshi (opcion == 2) {
-    resultado = restar(x, y) -chan
-    baka("Resultado: ", resultado) -chan
-}
-moshi (opcion == 3) {
-    resultado = multiplicar(x, y) -chan
-    baka("Resultado: ", resultado) -chan
-}
-moshi (opcion == 4) {
-    resultado = dividir(x, y) -chan
-    baka("Resultado: ", resultado) -chan
-}
+
 nani {
     baka("Opcion no valida") -chan
 }
