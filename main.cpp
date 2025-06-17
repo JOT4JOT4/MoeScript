@@ -8,7 +8,7 @@ extern FILE* yyin;
 
 int main(int argc, char* argv[]) {
     // Abrir el archivo calculadora.ms
-    FILE* input = fopen("calculadora.ms", "r");
+    FILE* input = fopen("nuevo.ms", "r");
     if (!input) {
         std::cerr << "No se pudo abrir el archivo calculadora.ms" << std::endl;
         return 1;

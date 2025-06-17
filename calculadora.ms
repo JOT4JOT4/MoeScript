@@ -44,7 +44,7 @@ kohai x = 0 -chan
 kohai y = 0 -chan
 kohai resultado = 0 -chan
 
-baka("Calculadora MoeScript") -chan
+baka("Calculadora MoeScript o(^▽^)o") -chan
 baka("1. Sumar") -chan
 baka("2. Restar") -chan
 baka("3. Multiplicar") -chan
