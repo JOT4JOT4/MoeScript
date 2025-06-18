@@ -7,22 +7,24 @@ extern int yyparse();
 extern FILE* yyin;
 
 int main(int argc, char* argv[]) {
-    // Abrir el archivo calculadora.ms
-    FILE* input = fopen("calculadora.ms", "r");
-    if (!input) {
-        std::cerr << "No se pudo abrir el archivo calculadora.ms" << std::endl;
+    if (argc < 2) {
+        std::cerr << "Uso: " << argv[0] << " <archivo.ms>" << std::endl;
         return 1;
     }
-    
-    // Asignar el archivo como entrada para el lexer
+
+    FILE* input = fopen(argv[1], "r");
+    if (!input) {
+        std::cerr << "No se pudo abrir el archivo " << argv[1] << std::endl;
+        return 1;
+    }
+
     yyin = input;
 
-    // Parsear y ejecutar
     if (yyparse() == 0 && root != nullptr) {
         try {
             Interpreter interpreter;
             interpreter.execute(root);
-            delete root; // Liberar memoria del AST
+            delete root;
         } catch (const std::exception& e) {
             std::cerr << "Error de ejecución: " << e.what() << std::endl;
             delete root;
